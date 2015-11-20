@@ -25,8 +25,8 @@ $(function(){
     stage.interactive=true;
     stage.DrawField(fieldX,fieldY,R,padding,0x4D4D4B);
     if(screenData.type==0) {
-        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.4, R, 0);
-        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.6, R, 1);
+        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.2, R, 0);
+        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.5, R, 1);
         stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.8, R, 2);
     }else{
         stage.CreatePiece(screenData.screenX * 0.2, screenData.screenY * 0.8, R, 0);
@@ -74,14 +74,15 @@ function startGame(){
     });
 
     if(screenData.type==0) {
-        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.4, R, 0);
-        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.6, R, 1);
+        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.2, R, 0);
+        stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.5, R, 1);
         stage.CreatePiece(screenData.screenX * 0.7, screenData.screenY * 0.8, R, 2);
     }else{
         stage.CreatePiece(screenData.screenX * 0.2, screenData.screenY * 0.8, R, 0);
         stage.CreatePiece(screenData.screenX * 0.5, screenData.screenY * 0.8, R, 1);
         stage.CreatePiece(screenData.screenX * 0.8, screenData.screenY * 0.8, R, 2);
     }
+    setBestScore(0);
 };
 
 
@@ -272,9 +273,6 @@ function onDragMove(){
         this.position.y =newPosition.y;
     }
 };
-
-
-
 
 //判断拖动的碎片是否能在当前位置放下
 function setPiece(bunny){
