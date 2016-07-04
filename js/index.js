@@ -16,6 +16,7 @@ var coverPiece=[];
 var bunnys=[];
 var gameJudge=[true,true,true];
 var screenData={};
+var store=null;
 
 $(function(){
     screenData=screenAdjustment();
@@ -82,7 +83,8 @@ function startGame(){
         stage.CreatePiece(screenData.screenX * 0.5, screenData.screenY * 0.8, R, 1);
         stage.CreatePiece(screenData.screenX * 0.8, screenData.screenY * 0.8, R, 2);
     }
-    setBestScore(0);
+    setBestScore(score);
+    $("#score").html(0);
 };
 
 
@@ -444,45 +446,31 @@ function setScore(plus){
 }
 //记录最高分
 function setBestScore(bestscore){
-    if(getCookie('pixi_score')!=null){
-        if(bestscore==0){
-            $("#bestScore").html("BESTSCORE:"+getCookie('pixi_score'));
-			score=0;
-			$("#score").html(score);
-        }
-        else if(bestscore> getCookie('pixi_score')){
-            setCookie('pixi_score',bestscore);
-            $("#bestScore").html("BESTSCORE:"+getCookie('pixi_score'));
-        }
-    }else{
-		 if(bestscore==0){
-		 	$("#bestScore").html("BESTSCORE:0");
-			score=0;
-			$("#score").html(score);
-		 }else{
-        	setCookie('pixi_score',bestscore);
-            $("#bestScore").html("BESTSCORE:"+bestscore);
-		 }
+   if(store==null) {
+       store=localforage.config({
+           driver      : localforage.WEBSQL,
+           name        : 'localScore',
+           version     : 1.0,
+           size        : 4980736,
+           storeName   : 'bestScore',
+           description : 'local storeage for bestscore'
+       });
     }
+    localforage.getItem("bestScore").then(function(value){
+        if(bestscore>value){
+            localforage.setItem("bestScore",bestscore);
+            return bestscore;
+        }else{
+            return value;
+        }
+    }).then(function(value){
+        $("#bestScore").html("BESTSCORE:"+value);
+        score=0;
+    });
+
 }
 
 function compare(v1,v2,v3){
 	return Math.abs(v1-v2-v3)<=padding;
-}
-
-function setCookie(name,value)
-{
-	var Days = 30;
-	var exp = new Date();
-	exp.setTime(exp.getTime() + Days*24*60*60*1000);
-	document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
-}
-function getCookie(name)
-{
-	var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-	if(arr=document.cookie.match(reg))
-		return unescape(arr[2]);
-	else
-		return null;
 }
 
