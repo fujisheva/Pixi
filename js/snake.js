@@ -40,6 +40,7 @@ var DrawSnake=function(){
         graphic: new PIXI.Graphics(),
         bodyArr: [],
         headIndex: null,
+        changeable:true,
         initArr: function () {
             var center = Math.round(Common.fieldArr.length / 2);
             this.headIndex = center;
@@ -52,10 +53,11 @@ var DrawSnake=function(){
             _self.bodyArr.forEach(function (v) {
                 drawRect(_self.graphic, v, 0x71E096);
             });
+            this.changeable=true;
         },
         interval:null,
         gameOver:function(){
-            alert(this.direction);
+            alert('Game Over');
             clearInterval(this.interval);
         },
         moving: function () {
@@ -161,8 +163,9 @@ window.onload=function() {
     }
 
     window.onkeydown = function (e) {
-        console.log(1)
-        if(Math.abs(e.keyCode-Common.snake.direction)!=2)
+        if(Math.abs(e.keyCode-Common.snake.direction)!=2&&Common.snake.changeable) {
+            Common.snake.changeable=false;
             Common.snake.direction = e.keyCode;
+        }
     }
 };
